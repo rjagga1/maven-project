@@ -3,12 +3,11 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mulesoft.training</groupId>
-	<artifactId>maven-project-rj</artifactId>
+	<artifactId>maven-project</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>mule</packaging>
 	<name>Mule maven-project Application</name>
-
-
+	
     <properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -16,53 +15,11 @@
 		<mule.version>3.8.0</mule.version>
     	<mule.tools.version>1.2</mule.tools.version>
     	<derby.version>10.12.1.1</derby.version>
+		<activeMQ.version>5.13.3</activeMQ.version>
 	</properties>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	<build>
-	
-	
-	
 		<plugins>
-		
-		
-		<plugin>
-    <groupId>org.mule.tools.maven</groupId>
-    <artifactId>mule-maven-plugin</artifactId>
-    <version>2.0</version>
-    <configuration>
-        <deploymentType>cloudhub</deploymentType>
-        <muleVersion>${mule.version}</muleVersion> 
-        <username>yourUsername</username>
-        <password>yourPassword</password>
-     <workerType>Micro</workerType>
-        <redeploy>true</redeploy>
-        <environment>Production</environment>
-    </configuration>
-    <executions>
-        <execution>
-            <id>deploy</id>
-            <phase>deploy</phase>
-            <goals>
-                <goal>deploy</goal>
-            </goals>
-        </execution>
-    </executions>
-</plugin>
 			<plugin>
 				<groupId>org.mule.tools.maven</groupId>
 				<artifactId>mule-app-maven-plugin</artifactId>
@@ -70,7 +27,13 @@
 				<extensions>true</extensions>
 				<configuration>
                     <copyToAppsDirectory>true</copyToAppsDirectory>
-				</configuration>
+				<inclusions>
+                        <inclusion>
+                            <groupId>com.mulesoft.muleesb.transports</groupId>
+                            <artifactId>mule-transport-sap</artifactId>
+                        </inclusion>
+                    </inclusions>
+                </configuration>
 			</plugin>
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
@@ -168,20 +131,17 @@
 			<version>${mule.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		<!--non-mule dependencies-->
+        <!--non mule dependancies-->
 		<dependency>
-    <groupId>org.apache.derby</groupId>
-    <artifactId>derby</artifactId>
-    <version>${derby.version}</version>
-     </dependency>
-
-	<dependency>
-	    <groupId>org.apache.activemq</groupId>
-	    <artifactId>activemq-all</artifactId>
-	    <version>5.13.3</version>
-	     <scope>provided</scope>
-	</dependency>
-
+			<groupId>org.apache.derby</groupId>
+			<artifactId>derby</artifactId>
+			<version>${derby.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-all</artifactId>
+			<version>${activeMQ.version}</version>
+		</dependency>
 		<!-- for testing -->
 		<dependency>
 			<groupId>org.mule.tests</groupId>
@@ -202,6 +162,18 @@
             <scope>provided</scope>
         </dependency>
     <dependency>
+            <groupId>com.mulesoft.weave</groupId>
+            <artifactId>mule-plugin-weave_2.11</artifactId>
+            <version>${mule.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    <dependency>
+            <groupId>com.mulesoft.muleesb.transports</groupId>
+            <artifactId>mule-transport-ftp-ee</artifactId>
+            <version>${mule.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    <dependency>
             <groupId>org.mule.modules</groupId>
             <artifactId>mule-module-db</artifactId>
             <version>${mule.version}</version>
@@ -213,8 +185,14 @@
             <version>${mule.version}</version>
             <scope>provided</scope>
         </dependency>
+    <dependency>
+            <groupId>org.mule.modules</groupId>
+            <artifactId>mule-module-json</artifactId>
+            <version>${mule.version}</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
-
+    
 	<repositories>
           <repository>
             <id>Central</id>
@@ -227,6 +205,11 @@
             <name>MuleSoft Releases Repository</name>
             <url>http://repository.mulesoft.org/releases/</url>
             <layout>default</layout>
+        </repository>
+    <repository>
+            <id>mule-ee-releases</id>
+            <name>MuleEE Releases Repository</name>
+            <url>https://repository-master.mulesoft.org/nexus/content/repositories/releases-ee/</url>
         </repository>
     </repositories>
     <pluginRepositories>
